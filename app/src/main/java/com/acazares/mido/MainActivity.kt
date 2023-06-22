@@ -1,12 +1,16 @@
 package com.acazares.mido
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,16 +22,25 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.rounded.AccountBox
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ArrowForward
+import androidx.compose.material.icons.rounded.Build
+import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.rounded.KeyboardArrowRight
+import androidx.compose.material.icons.rounded.List
+import androidx.compose.material.icons.rounded.MoreVert
+import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material.icons.rounded.Place
 import androidx.compose.material.icons.rounded.PlayArrow
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.ShoppingCart
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
@@ -49,11 +62,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.acazares.mido.ui.theme.MiDoTheme
 
+//import com.acazares.mido.assets.ScanMusicFiles
+
+//MAIN ACTIVITY
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,6 +101,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun PlayerTopView(songName: String) {
     var expanded by remember { mutableStateOf(false) }
+    var selectedViewMenu by remember { mutableStateOf("songs") }
 //    LaunchedEffect(Unit){
 //        fetchData
 //    }
@@ -91,6 +109,7 @@ fun PlayerTopView(songName: String) {
         modifier = Modifier
             .padding(4.dp, 4.dp)
             .fillMaxSize()
+        //.verticalScroll(rememberScrollState())
     ) {
         Card(
             modifier = Modifier
@@ -102,21 +121,128 @@ fun PlayerTopView(songName: String) {
                 PlayerMain(songName, expanded)
             }
         }
-        // Footer
-        Box(
+        //scanMusicFiles()
+
+        //NAVIGATION
+        /*
+        This part is for navigation views, each view should have its own composable functions.
+        Views selection will depend on which option from the menu below is selected.
+        By default, main view will be songs list.
+         */
+        NavigationViews(id = selectedViewMenu)
+        LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
-                .padding(vertical = 16.dp),
-            contentAlignment = Alignment.Center
+                .weight(7f)
+                .padding(4.dp)
         ) {
-            Card(
+            item {
+                Text(
+                    text = "Song list",
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+            // Add # items
+            items(44) { index ->
+                Text(text = "Song number: $index")
+            }
+        }
+        // Footer
+        Card(
+            modifier = Modifier.weight(1f)
+        ) {
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
+                    //.border((4).dp, androidx.compose.ui.graphics.Color.Black)
+                    .fillMaxSize()
+                    //.weight(1f)
+                    .padding(vertical = 4.dp),
+                contentAlignment = Alignment.Center
             ) {
-                Row() {
-                    Text(text = "Menú inferior contextual")
+                Card(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(4.dp),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .padding(4.dp)
+                            //.horizontalScroll(rememberScrollState())
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Card(modifier = Modifier.clickable { selectedViewMenu = "Songs" }) {
+                            Column() {
+                                Icon(
+                                    Icons.Rounded.Person,
+                                    contentDescription = "Songs",
+                                    modifier = Modifier
+                                        .size(44.dp)
+                                    //.clickable { println("CLICKED FORWARD BUTTON") }
+                                )
+                                Text(text = "Songs")
+                            }
+                        }
+                        Card(modifier = Modifier.clickable { selectedViewMenu = "Albums" }) {
+                            Column() {
+                                Icon(
+                                    Icons.Rounded.Person,
+                                    contentDescription = "Albums",
+                                    modifier = Modifier
+                                        .size(44.dp)
+                                    //.clickable { println("CLICKED FORWARD BUTTON") }
+                                )
+                                Text(text = "Albums")
+                            }
+                        }
+                        Card(modifier = Modifier.clickable { selectedViewMenu = "Artists" }) {
+                            Column() {
+                                Icon(
+                                    Icons.Rounded.MoreVert,
+                                    contentDescription = "Forward",
+                                    modifier = Modifier
+                                        .size(44.dp)
+                                )
+                                Text(text = "Artists")
+                            }
+                        }
+                        Card(modifier = Modifier.clickable { selectedViewMenu = "Playlists" }) {
+                            Column() {
+                                Icon(
+                                    Icons.Rounded.List,
+                                    contentDescription = "Forward",
+                                    modifier = Modifier
+                                        .size(44.dp)
+                                )
+                                Text(text = "Playlists")
+                            }
+                        }
+                        /*repeat(21) {
+                            Card() {
+                                Column() {
+                                    Icon(Icons.Rounded.Person,
+                                        contentDescription = "Forward",
+                                        modifier = Modifier
+                                            .size(44.dp)
+                                            .clickable { println("CLICKED FORWARD BUTTON") })
+                                    Text(text = "Artist")
+                                }
+                            }
+                        }*/
+                        Card(modifier = Modifier.clickable { selectedViewMenu = "Settings" }) {
+                            Column() {
+                                Icon(
+                                    Icons.Rounded.Settings,
+                                    contentDescription = "Forward",
+                                    modifier = Modifier
+                                        .size(44.dp)
+                                )
+                                Text(text = "Settings")
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -126,6 +252,7 @@ fun PlayerTopView(songName: String) {
 //Main view of player
 @Composable
 fun PlayerMain(songName: String, expanded: Boolean) {
+    val context = LocalContext.current
     Text(
         "Now playing: $songName",
         modifier = Modifier.padding(16.dp),
@@ -175,18 +302,31 @@ fun PlayerMain(songName: String, expanded: Boolean) {
                             Icon(
                                 Icons.Rounded.KeyboardArrowLeft,
                                 contentDescription = "Back",
-                                modifier = Modifier.size(44.dp).clickable { println("CLICKED BACK BUTTON")
-                                System.out.println("CLICKED BACK BUTTON")}
+                                modifier = Modifier
+                                    .size(44.dp)
+                                    .clickable {
+                                        Toast
+                                            .makeText(
+                                                context,
+                                                "BACK",
+                                                Toast.LENGTH_LONG
+                                            )
+                                            .show()
+                                    }
                             )
                             Icon(
                                 Icons.Rounded.PlayArrow,
                                 contentDescription = "Play/Pause",
-                                modifier = Modifier.size(44.dp).clickable { println("CLICKED PLAY BUTTON") }
+                                modifier = Modifier
+                                    .size(44.dp)
+                                    .clickable { println("CLICKED PLAY BUTTON") }
                             )
                             Icon(
                                 Icons.Rounded.KeyboardArrowRight,
                                 contentDescription = "Forward",
-                                modifier = Modifier.size(44.dp).clickable { println("CLICKED FORWARD BUTTON") }
+                                modifier = Modifier
+                                    .size(44.dp)
+                                    .clickable { println("CLICKED FORWARD BUTTON") }
                             )
                         }
                     }
@@ -199,7 +339,7 @@ fun PlayerMain(songName: String, expanded: Boolean) {
     }
 }
 
-//For testing purpose
+//Just for testing purpose
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Card() {
@@ -220,6 +360,16 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
             }
         }
     }
+}
+
+//Songs list
+@Composable
+fun NavigationViews(id: String) {
+    Text(
+        text = id,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.fillMaxWidth()
+    )
 }
 
 //PREVIEWS
