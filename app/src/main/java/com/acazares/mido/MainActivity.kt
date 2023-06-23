@@ -6,9 +6,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,6 +22,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -98,10 +101,11 @@ class MainActivity : ComponentActivity() {
 * - Right side: Song name, album name.
 * - Player controls.
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PlayerTopView(songName: String) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedViewMenu by remember { mutableStateOf("songs") }
+    var selectedViewMenu by remember { mutableStateOf("Songs") }
 //    LaunchedEffect(Unit){
 //        fetchData
 //    }
@@ -219,18 +223,7 @@ fun PlayerTopView(songName: String) {
                                 Text(text = "Playlists")
                             }
                         }
-                        /*repeat(21) {
-                            Card() {
-                                Column() {
-                                    Icon(Icons.Rounded.Person,
-                                        contentDescription = "Forward",
-                                        modifier = Modifier
-                                            .size(44.dp)
-                                            .clickable { println("CLICKED FORWARD BUTTON") })
-                                    Text(text = "Artist")
-                                }
-                            }
-                        }*/
+
                         Card(modifier = Modifier.clickable { selectedViewMenu = "Settings" }) {
                             Column() {
                                 Icon(
@@ -362,14 +355,61 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     }
 }
 
-//Songs list
+//Views
 @Composable
+@ExperimentalFoundationApi
 fun NavigationViews(id: String) {
     Text(
         text = id,
         textAlign = TextAlign.Center,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .combinedClickable { println("a") }
     )
+
+    if (id!=null){
+        SongsLists()
+    }
+
+}
+
+//SONGS LISTS - TEST
+@Composable
+fun SongsLists(){
+    /*TODO
+    *  Fix songs list view and each card of it
+    * */
+    LazyColumn( modifier = Modifier.padding(14.dp)) {
+        item { Card(modifier = Modifier.fillMaxWidth().size(81.dp)) {
+            Row(modifier = Modifier.size(width = 400.dp, height = 100.dp)) {
+                Image(painter = painterResource(id = R.drawable.michi_facha), contentDescription = "Testing" )
+                Column(modifier = Modifier.padding(4.dp).fillMaxWidth()) {
+                    Text(
+                        text = "artist.name",
+                        modifier = Modifier.paddingFromBaseline(top = 1.dp)
+                    )
+                    Text("artist.album")
+                    Text("artist.song")
+                }
+            }
+        } }
+
+        repeat(81){
+            item { Card(modifier = Modifier.fillMaxWidth().size(81.dp)) {
+                Row(modifier = Modifier.size(width = 400.dp, height = 100.dp)) {
+                    Image(painter = painterResource(id = R.drawable.michi_facha), contentDescription = "Testing" )
+                    Column(modifier = Modifier.padding(4.dp).fillMaxWidth()) {
+                        Text(
+                            text = "artist.name",
+                            modifier = Modifier.paddingFromBaseline(top = 1.dp)
+                        )
+                        Text("artist.album")
+                        Text("artist.song")
+                    }
+                }
+            } }
+        }
+    }
 }
 
 //PREVIEWS
