@@ -111,7 +111,7 @@ fun PlayerTopView(songName: String) {
 //    }
     Column(
         modifier = Modifier
-            .padding(4.dp, 4.dp)
+            .padding(4.dp, 21.dp)
             .fillMaxSize()
         //.verticalScroll(rememberScrollState())
     ) {
@@ -133,25 +133,30 @@ fun PlayerTopView(songName: String) {
         Views selection will depend on which option from the menu below is selected.
         By default, main view will be songs list.
          */
-        NavigationViews(id = selectedViewMenu)
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(7f)
-                .padding(4.dp)
-        ) {
-            item {
-                Text(
-                    text = "Song list",
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-            // Add # items
-            items(44) { index ->
-                Text(text = "Song number: $index")
-            }
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .weight(7f)) {
+            NavigationViews(id = selectedViewMenu)
         }
+
+//        LazyColumn(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .weight(7f)
+//                .padding(4.dp)
+//        ) {
+//            item {
+//                Text(
+//                    text = "Song list",
+//                    textAlign = TextAlign.Center,
+//                    modifier = Modifier.fillMaxWidth()
+//                )
+//            }
+//            // Add # items
+//            items(44) { index ->
+//                Text(text = "Song number: $index")
+//            }
+//        }
         // Footer
         Card(
             modifier = Modifier.weight(1f)
@@ -254,10 +259,6 @@ fun PlayerMain(songName: String, expanded: Boolean) {
     )
     AnimatedVisibility(expanded) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
-            Text(
-                text = " Sección del reproductor de música ",
-                style = MaterialTheme.typography.bodyLarge
-            )
             Card(
                 border = BorderStroke((-1).dp, androidx.compose.ui.graphics.Color.Black),
                 elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
@@ -277,7 +278,7 @@ fun PlayerMain(songName: String, expanded: Boolean) {
                         //Space between album art and song information
                         Spacer(modifier = Modifier.width(8.dp))
                         Column {
-                            Text(text = "Song Name")
+                            Text(text = "Artist")
                             // Add a vertical space between the author and message texts
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(text = "Album")
@@ -367,7 +368,7 @@ fun NavigationViews(id: String) {
             .combinedClickable { println("a") }
     )
 
-    if (id!=null){
+    if (id != null) {
         SongsLists()
     }
 
@@ -375,39 +376,46 @@ fun NavigationViews(id: String) {
 
 //SONGS LISTS - TEST
 @Composable
-fun SongsLists(){
+fun SongsLists() {
     /*TODO
     *  Fix songs list view and each card of it
     * */
-    LazyColumn( modifier = Modifier.padding(14.dp)) {
-        item { Card(modifier = Modifier.fillMaxWidth().size(81.dp)) {
-            Row(modifier = Modifier.size(width = 400.dp, height = 100.dp)) {
-                Image(painter = painterResource(id = R.drawable.michi_facha), contentDescription = "Testing" )
-                Column(modifier = Modifier.padding(4.dp).fillMaxWidth()) {
-                    Text(
-                        text = "artist.name",
-                        modifier = Modifier.paddingFromBaseline(top = 1.dp)
-                    )
-                    Text("artist.album")
-                    Text("artist.song")
-                }
-            }
-        } }
+    LazyColumn(
+        modifier = Modifier
+            .padding(14.dp)
+            .fillMaxWidth()
 
-        repeat(81){
-            item { Card(modifier = Modifier.fillMaxWidth().size(81.dp)) {
-                Row(modifier = Modifier.size(width = 400.dp, height = 100.dp)) {
-                    Image(painter = painterResource(id = R.drawable.michi_facha), contentDescription = "Testing" )
-                    Column(modifier = Modifier.padding(4.dp).fillMaxWidth()) {
-                        Text(
-                            text = "artist.name",
-                            modifier = Modifier.paddingFromBaseline(top = 1.dp)
+            .padding(4.dp)
+    ) {
+        repeat(81) {
+            item {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .size(81.dp)
+                        .padding(4.dp)
+                ) {
+                    Row(modifier = Modifier.size(width = 400.dp, height = 100.dp)) {
+                        Image(
+                            painter = painterResource(id = R.drawable.michi_facha),
+                            contentDescription = "Testing"
                         )
-                        Text("artist.album")
-                        Text("artist.song")
+                        Column(
+                            modifier = Modifier
+                                .padding(4.dp)
+                                .fillMaxWidth()
+                        ) {
+                            Text(
+                                text = "artist.name",
+                                modifier = Modifier.paddingFromBaseline(top = 1.dp)
+                            )
+                            Text("artist.album")
+                            Text("artist.song")
+                        }
                     }
                 }
-            } }
+            }
+
         }
     }
 }

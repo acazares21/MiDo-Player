@@ -2,4 +2,5 @@
 <resources>
 
     <style name="Theme.MiDo" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.DOS" parent="android:Theme.Material.NoActionBar.TranslucentDecor"/>
 </resources>
